@@ -87,10 +87,14 @@ d3.csv('high_diamond_ranked_10min.csv', dataPreprocessor).then(function(dataset)
 
     allGames = dataset
     // **** Your JavaScript code goes here ****
-    updateChart();
+    updateChart('all');
 });
 
-function updateChart() {
+function updateChart(filterCategory) {
     // Update the chart
     console.log(allGames);
+
+    if (filterCategory == 'all') {
+        filtered = allGames;
+    }
 }
