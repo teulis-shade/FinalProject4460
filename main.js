@@ -128,25 +128,73 @@ function updateChart() {
     var tower = document.getElementById("towerCheck").classList.contains("active") == true;
     var ward = document.getElementById("wardCheck").classList.contains("active") == true;
     var level = document.getElementById("avgLvlCheck").classList.contains("active") == true;
+        
+    // Compute the spacing for axes based on number of categories selected
+    var axisBand = chartWidth / ((+firstBlood + +goldDiff + +gold + +kill + +death + +assist + +cs + +tower + +ward + +level) * 2);
+    var numberUsed = 0;
+
+    if (firstBlood) {
+       drawAxis(firstBloodScale, "Winner First Blood", axisBand * numberUsed++);
+       drawAxis(firstBloodScale, "Loser First Blood", axisBand * numberUsed++);
+    }
+    if (goldDiff) {
+       drawAxis(goldDiffScale, "Winner Gold Diff", axisBand * numberUsed++);
+       drawAxis(goldDiffScale, "Loser Gold Diff", axisBand * numberUsed++);
+    }
+
+    if (gold) {
+       drawAxis(totalGoldScale, "Winner Gold", axisBand * numberUsed++);
+       drawAxis(totalGoldScale, "Loser Gold", axisBand * numberUsed++);
+    }
+
+    if (kill) {
+       drawAxis(killScale, "Winner Kills", axisBand * numberUsed++);
+       drawAxis(killScale, "Loser Kills", axisBand * numberUsed++);
+    }
+
+    if (death) {
+       drawAxis(deathScale, "Winner Deaths", axisBand * numberUsed++);
+       drawAxis(deathScale, "Loser Deaths", axisBand * numberUsed++);
+    }
+
+    if (assist) {
+       drawAxis(assistsScale, "Winner Assists", axisBand * numberUsed++);
+       drawAxis(assistsScale, "Loser Assists", axisBand * numberUsed++);
+    }
+
+    if (cs) {
+       drawAxis(csScale, "Winner CS", axisBand * numberUsed++);
+       drawAxis(csScale, "Loser CS", axisBand * numberUsed++);
+    }
+
+    if (tower) {
+       drawAxis(towerScale, "Winner Towers", axisBand * numberUsed++);
+       drawAxis(towerScale, "Loser Towers", axisBand * numberUsed++);
+    }
+
+    if (ward) {
+       drawAxis(wardScale, "Winner Wards", axisBand * numberUsed++);
+       drawAxis(wardScale, "Loser Wards", axisBand * numberUsed++);
+    }
+
+    if (level) {
+       drawAxis(lvlScale, "Winner Average Level", axisBand * numberUsed++);
+       drawAxis(lvlScale, "Loser Average Level", axisBand * numberUsed++);
+    }
 
     allGames.forEach(element => {
         
-        // Compute the spacing for axes based on number of categories selected
-        var axisBand = chartWidth / ((+firstBlood + +goldDiff + +gold + +kill + +death + +assist + +cs + +tower + +ward + +level) * 2);
-        
         // Make a variable to store how far on the PCP we are
-        var numberUsed = 0;
+        numberUsed = 0;
         
         // Create a variable for the previous line's position, so we can join to the next variable
         var previousDot = null;
         var newLine = chartG.append("g");
         // Set the style of the line to the color of the winner
-        var style = "stroke:" + element.winColor + ";stroke-width:1;stroke-opacity:.02";
+        var style = "stroke:" + element.winColor + ";stroke-width:2;stroke-opacity:.04";
 
         // Use these to start the lines
         if (firstBlood) {
-            drawAxis(firstBloodScale, "First Blood", axisBand * numberUsed);
-            drawAxis(firstBloodScale, "First Blood", axisBand * (numberUsed + 1));
             newLine.append("line")
                 .attr("y1", firstBloodScale(element.winFirstBlood))
                 .attr("y2", firstBloodScale(element.loseFirstBlood))
@@ -158,8 +206,6 @@ function updateChart() {
             numberUsed += 2;
         }
         if (goldDiff) {
-            drawAxis(goldDiffScale, "Gold Diff", axisBand * numberUsed);
-            drawAxis(goldDiffScale, "Gold Diff", axisBand * (numberUsed + 1));
             newLine.append("line")
                 .attr("y1", goldDiffScale(element.winGoldDiff))
                 .attr("y2", goldDiffScale(element.loseGoldDiff))
