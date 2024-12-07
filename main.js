@@ -71,16 +71,16 @@ var chartG = svg.append('g')
     .attr('transform', 'translate('+[padding.l, padding.t]+')');
 
 //Create the scales for values
-var firstBloodScale = d3.scaleLinear([0, 1], [30, chartHeight - 30]);
-var goldDiffScale = d3.scaleLinear([-10000, 10000], [30, chartHeight - 30]);
-var totalGoldScale = d3.scaleLinear([0, 30000], [30, chartHeight - 30]);
-var killScale = d3.scaleLinear([0, 20], [30, chartHeight - 30]);
-var deathScale = d3.scaleLinear([0, 20], [30, chartHeight - 30]);
-var assistsScale = d3.scaleLinear([0, 40], [30, chartHeight - 30]);
-var csScale = d3.scaleLinear([0, 300], [30, chartHeight - 30]);
-var towerScale = d3.scaleLinear([0, 5], [30, chartHeight - 30]);
-var wardScale = d3.scaleLinear([0, 300], [30, chartHeight - 30]);
-var lvlScale = d3.scaleLinear([1, 18], [30, chartHeight - 30]);
+var firstBloodScale = d3.scaleLinear([0, 1], [chartHeight - 30, 30]);
+var goldDiffScale = d3.scaleLinear([-10000, 10000], [chartHeight - 30, 30]);
+var totalGoldScale = d3.scaleLinear([0, 30000], [chartHeight - 30, 30]);
+var killScale = d3.scaleLinear([0, 20], [chartHeight - 30, 30]);
+var deathScale = d3.scaleLinear([0, 20], [chartHeight - 30, 30]);
+var assistsScale = d3.scaleLinear([0, 40], [chartHeight - 30, 30]);
+var csScale = d3.scaleLinear([0, 300], [chartHeight - 30, 30]);
+var towerScale = d3.scaleLinear([0, 5], [chartHeight - 30, 30]);
+var wardScale = d3.scaleLinear([0, 300], [chartHeight - 30, 30]);
+var lvlScale = d3.scaleLinear([1, 18], [chartHeight - 30, 30]);
 
 
 
@@ -120,7 +120,7 @@ function updateChart() {
         var previousDot = null;
         var newLine = chartG.append("g");
         //use this to set the class of the lines to change the css
-        var style = "stroke:" + element.winColor + ";stroke-width:2";
+        var style = "stroke:" + element.winColor + ";stroke-width:2;stroke-opacity:.05";
         if (firstBlood) {
             newLine.append("line")
                 .attr("y1", firstBloodScale(element.winFirstBlood))
