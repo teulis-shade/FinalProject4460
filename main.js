@@ -1,4 +1,4 @@
-// This function converts strings to numeric temperatures during data preprocessing
+// Convert the rows into data with winning or losing team.
 function dataPreprocessor(row) {
 
     //if the blue team won, use blue team as winning team, otherwise use red.
@@ -96,7 +96,7 @@ function updateChart() {
     // clear the old stuff
     chartG.selectAll("*").remove();
 
-    // Update the chart
+    // Get what variables we are tracking for the checkbox
     var firstBlood = document.getElementById("fbCheck").checked == true;
     var goldDiff = document.getElementById("goldDiffCheck").checked == true;
     var gold = document.getElementById("goldCheck").checked == true;
@@ -116,11 +116,13 @@ function updateChart() {
         // Make a variable to store how far on the PCP we are
         var numberUsed = 0;
         
-        // Create a variable for the previous line
+        // Create a variable for the previous line's position, so we can join to the next variable
         var previousDot = null;
         var newLine = chartG.append("g");
-        //use this to set the class of the lines to change the css
+        // Set the style of the line to the color of the winner
         var style = "stroke:" + element.winColor + ";stroke-width:2;stroke-opacity:.05";
+
+        // Use these to start the lines
         if (firstBlood) {
             newLine.append("line")
                 .attr("y1", firstBloodScale(element.winFirstBlood))
