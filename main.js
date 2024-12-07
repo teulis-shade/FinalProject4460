@@ -123,6 +123,13 @@ function updateChart() {
     // clear the old stuff
     chartG.selectAll("*").remove();
 
+    chartG.append("text")
+    .attr("x", 20)
+    .attr("y", 0)
+    .style("font-size", "18px")
+    .style("font-weight", "bold")
+    .text("League Of Legends Game Statistics");
+
     // Get what variables we are tracking for the checkbox
     var firstBlood = document.getElementById("fbCheck").classList.contains("active") == true;
     var goldDiff = document.getElementById("goldDiffCheck").classList.contains("active") == true;
