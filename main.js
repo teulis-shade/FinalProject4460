@@ -71,16 +71,16 @@ var chartG = svg.append('g')
     .attr('transform', 'translate('+[padding.l, padding.t]+')');
 
 //Create the scales for values
-var firstBloodScale = d3.scaleLinear([30, chartHeight - 30], [0, 1]);
-var goldDiffScale = d3.scaleLinear([30, chartHeight - 30], [-20000, 20000]);
-var totalGoldScale = d3.scaleLinear([30, chartHeight - 30], [0, 20000]);
-var killScale = d3.scaleLinear([30, chartHeight - 30], [0, 20]);
-var deathScale = d3.scaleLinear([30, chartHeight - 30], [0, 20]);
-var assistsScale = d3.scaleLinear([30, chartHeight - 30], [0, 40]);
-var csScale = d3.scaleLinear([30, chartHeight - 30], [0, 300]);
-var towerScale = d3.scaleLinear([30, chartHeight - 30], [0, 5]);
-var wardScale = d3.scaleLinear([30, chartHeight - 30], [0, 50]);
-var lvlScale = d3.scaleLinear([30, chartHeight - 30], [1, 18]);
+var firstBloodScale = d3.scaleLinear([0, 1], [30, chartHeight - 30]);
+var goldDiffScale = d3.scaleLinear([-10000, 10000], [30, chartHeight - 30]);
+var totalGoldScale = d3.scaleLinear([0, 30000], [30, chartHeight - 30]);
+var killScale = d3.scaleLinear([0, 20], [30, chartHeight - 30]);
+var deathScale = d3.scaleLinear([0, 20], [30, chartHeight - 30]);
+var assistsScale = d3.scaleLinear([0, 40], [30, chartHeight - 30]);
+var csScale = d3.scaleLinear([0, 300], [30, chartHeight - 30]);
+var towerScale = d3.scaleLinear([0, 5], [30, chartHeight - 30]);
+var wardScale = d3.scaleLinear([0, 300], [30, chartHeight - 30]);
+var lvlScale = d3.scaleLinear([1, 18], [30, chartHeight - 30]);
 
 
 
@@ -94,7 +94,7 @@ d3.csv('high_diamond_ranked_10min.csv', dataPreprocessor).then(function(dataset)
 
 function updateChart() {
     // clear the old stuff
-
+    chartG.selectAll("*").remove();
 
     // Update the chart
     var firstBlood = document.getElementById("fbCheck").checked == true;
@@ -111,75 +111,206 @@ function updateChart() {
     allGames.forEach(element => {
         
         // Compute the spacing for axes based on number of categories selected
-        var axisBand = chartHeight / (+firstBlood + +goldDiff + +gold + +kill + +death + +assist + +cs + +tower + +ward + +level);
+        var axisBand = chartWidth / ((+firstBlood + +goldDiff + +gold + +kill + +death + +assist + +cs + +tower + +ward + +level) * 2);
         
         // Make a variable to store how far on the PCP we are
         var numberUsed = 0;
         
         // Create a variable for the previous line
         var previousDot = null;
-
+        var newLine = chartG.append("g");
         //use this to set the class of the lines to change the css
-        var className = ".redWins";
-        if (winColor == "blue") {
-            className = ".blueWins";
-        }
+        var style = "stroke:" + element.winColor + ";stroke-width:2";
         if (firstBlood) {
-            console.log("firstBlood: " + element.winFirstBlood + " " + element.loseFirstBlood);
+            newLine.append("line")
+                .attr("y1", firstBloodScale(element.winFirstBlood))
+                .attr("y2", firstBloodScale(element.loseFirstBlood))
+                .attr("style", style)
+                .attr("x1", axisBand * numberUsed)
+                .attr("x2", axisBand * (numberUsed + 1));
+
+            previousDot = firstBloodScale(element.loseFirstBlood);
+            numberUsed += 2;
         }
         if (goldDiff) {
-            if (previousDot == null) {
-                previousDot;
+            newLine.append("line")
+                .attr("y1", goldDiffScale(element.winGoldDiff))
+                .attr("y2", goldDiffScale(element.loseGoldDiff))
+                .attr("style", style)
+                .attr("x1", axisBand * numberUsed)
+                .attr("x2", axisBand * (numberUsed + 1));
+
+            if (previousDot != null) {
+                newLine.append("line")
+                    .attr("y1", previousDot)
+                    .attr("y2", goldDiffScale(element.winGoldDiff))
+                    .attr("style", style)
+                    .attr("x1", axisBand * (numberUsed - 1))
+                    .attr("x2", axisBand * numberUsed);
             }
-            console.log("goldDiff: " + element.winGoldDiff + " " + element.loseGoldDiff);
+            
+            previousDot = goldDiffScale(element.loseGoldDiff);
+            numberUsed += 2;
         }
         if (gold) {
-            if (previousDot == null) {
-                previousDot;
+            newLine.append("line")
+                .attr("y1", totalGoldScale(element.winTotalGold))
+                .attr("y2", totalGoldScale(element.loseTotalGold))
+                .attr("style", style)
+                .attr("x1", axisBand * numberUsed)
+                .attr("x2", axisBand * (numberUsed + 1));
+
+            if (previousDot != null) {
+                newLine.append("line")
+                    .attr("y1", previousDot)
+                    .attr("y2", totalGoldScale(element.winTotalGold))
+                    .attr("style", style)
+                    .attr("x1", axisBand * (numberUsed - 1))
+                    .attr("x2", axisBand * numberUsed);
             }
-            console.log("totalGold: " + element.winTotalGold + " " + element.loseTotalGold);
+            
+            previousDot = totalGoldScale(element.loseTotalGold);
+            numberUsed += 2;
         }
         if (kill) {
-            if (previousDot == null) {
-                previousDot;
+            newLine.append("line")
+                .attr("y1", killScale(element.winKills))
+                .attr("y2", killScale(element.loseKills))
+                .attr("style", style)
+                .attr("x1", axisBand * numberUsed)
+                .attr("x2", axisBand * (numberUsed + 1));
+
+            if (previousDot != null) {
+                newLine.append("line")
+                    .attr("y1", previousDot)
+                    .attr("y2", killScale(element.winKills))
+                    .attr("style", style)
+                    .attr("x1", axisBand * (numberUsed - 1))
+                    .attr("x2", axisBand * numberUsed);
             }
-            console.log("kills: " + element.winKills + " " + element.loseKills);
+            
+            previousDot = killScale(element.loseKills);
+            numberUsed += 2;
         }
         if (death) {
-            if (previousDot == null) {
-                previousDot;
+            newLine.append("line")
+                .attr("y1", deathScale(element.winDeaths))
+                .attr("y2", deathScale(element.loseDeaths))
+                .attr("style", style)
+                .attr("x1", axisBand * numberUsed)
+                .attr("x2", axisBand * (numberUsed + 1));
+
+            if (previousDot != null) {
+                newLine.append("line")
+                    .attr("y1", previousDot)
+                    .attr("y2", deathScale(element.winDeaths))
+                    .attr("style", style)
+                    .attr("x1", axisBand * (numberUsed - 1))
+                    .attr("x2", axisBand * numberUsed);
             }
-            console.log("deaths: " + element.winDeaths + " " + element.loseDeaths);
+        
+            previousDot = deathScale(element.loseDeaths);
+            numberUsed += 2;
         }
         if (assist) {
-            if (previousDot == null) {
-                previousDot;
+            newLine.append("line")
+                .attr("y1", assistsScale(element.winAssists))
+                .attr("y2", assistsScale(element.loseAssists))
+                .attr("style", style)
+                .attr("x1", axisBand * numberUsed)
+                .attr("x2", axisBand * (numberUsed + 1));
+
+            if (previousDot != null) {
+                newLine.append("line")
+                    .attr("y1", previousDot)
+                    .attr("y2", assistsScale(element.winAssists))
+                    .attr("style", style)
+                    .attr("x1", axisBand * (numberUsed - 1))
+                    .attr("x2", axisBand * numberUsed);
             }
-            console.log("assists: " + element.winAssists + " " + element.loseAssists);
+            
+            previousDot = assistsScale(element.loseAssists);
+            numberUsed += 2;
         }
         if (cs) {
-            if (previousDot == null) {
-                previousDot;
+            newLine.append("line")
+                .attr("y1", csScale(element.winCS))
+                .attr("y2", csScale(element.loseCS))
+                .attr("style", style)
+                .attr("x1", axisBand * numberUsed)
+                .attr("x2", axisBand * (numberUsed + 1));
+
+            if (previousDot != null) {
+                newLine.append("line")
+                    .attr("y1", previousDot)
+                    .attr("y2", csScale(element.winCS))
+                    .attr("style", style)
+                    .attr("x1", axisBand * (numberUsed - 1))
+                    .attr("x2", axisBand * numberUsed);
             }
-            console.log("cs: " + element.winCS + " " + element.loseCS);
+            
+            previousDot = csScale(element.loseCS);
+            numberUsed += 2;
         }
         if (tower) {
-            if (previousDot == null) {
-                previousDot;
+            newLine.append("line")
+                .attr("y1", towerScale(element.winTowers))
+                .attr("y2", towerScale(element.loseTowers))
+                .attr("style", style)
+                .attr("x1", axisBand * numberUsed)
+                .attr("x2", axisBand * (numberUsed + 1));
+
+            if (previousDot != null) {
+                newLine.append("line")
+                    .attr("y1", previousDot)
+                    .attr("y2", towerScale(element.winTowers))
+                    .attr("style", style)
+                    .attr("x1", axisBand * (numberUsed - 1))
+                    .attr("x2", axisBand * numberUsed);
             }
-            console.log("towers taken: " + element.winTowers + " " + element.loseTowers);
+            
+            previousDot = towerScale(element.loseTowers);
+            numberUsed += 2;
         }
         if (ward) {
-            if (previousDot == null) {
-                previousDot;
+            newLine.append("line")
+                .attr("y1", wardScale(element.winWards))
+                .attr("y2", wardScale(element.loseWards))
+                .attr("style", style)
+                .attr("x1", axisBand * numberUsed)
+                .attr("x2", axisBand * (numberUsed + 1));
+
+            if (previousDot != null) {
+                newLine.append("line")
+                    .attr("y1", previousDot)
+                    .attr("y2", wardScale(element.winWards))
+                    .attr("style", style)
+                    .attr("x1", axisBand * (numberUsed - 1))
+                    .attr("x2", axisBand * numberUsed);
             }
-            console.log("wards placed: " + element.winWards + " " + element.loseWards);
+            
+            previousDot = wardScale(element.loseWards);
+            numberUsed += 2;
         }
         if (level) {
-            if (previousDot == null) {
-                previousDot;
+            newLine.append("line")
+                .attr("y1", lvlScale(element.winAvgLvl))
+                .attr("y2", lvlScale(element.loseAvgLvl))
+                .attr("style", style)
+                .attr("x1", axisBand * numberUsed)
+                .attr("x2", axisBand * (numberUsed + 1));
+
+            if (previousDot != null) {
+                newLine.append("line")
+                    .attr("y1", previousDot)
+                    .attr("y2", lvlScale(element.winAvgLvl))
+                    .attr("style", style)
+                    .attr("x1", axisBand * (numberUsed - 1))
+                    .attr("x2", axisBand * numberUsed);
             }
-            console.log("average level: " + element.winAvgLvl + " " + element.loseAvgLvl);
+            
+            previousDot = lvlScale(element.loseAvgLvl);
+            numberUsed += 2;
         }
     });
 }
