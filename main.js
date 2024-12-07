@@ -1,12 +1,3 @@
-// Global function called when select element is changed
-function onCategoryChanged() {
-    var select = d3.select('#categorySelect').node();
-    // Get current value of select element
-    var category = select.options[select.selectedIndex].value;
-    // Update chart with the selected category of temperatures
-    updateChart(category);
-}
-
 // This function converts strings to numeric temperatures during data preprocessing
 function dataPreprocessor(row) {
     if (row.blueWins == 1) {
@@ -16,7 +7,7 @@ function dataPreprocessor(row) {
             winDeaths: +row.blueDeaths,
             winAssists: +row.blueAssists,
             winTotalGold: +row.blueTotalGold,
-            winCSPerMin: +row.blueCSPerMin * 10,
+            winCS: +row.blueCSPerMin * 10,
             winTowers: +row.blueTowersDestroyed,
             winWards: +row.blueWardsPlaced,
             winGoldDiff: +row.blueGoldDiff,
@@ -27,7 +18,7 @@ function dataPreprocessor(row) {
             loseDeaths: +row.redDeaths,
             loseAssists: +row.redAssists,
             loseTotalGold: +row.redTotalGold,
-            loseCSPerMin: +row.redCSPerMin * 10,
+            loseCS: +row.redCSPerMin * 10,
             loseTowers: +row.redTowersDestroyed,
             loseWards: +row.redWardsPlaced,
             loseGoldDiff: +row.redGoldDiff,
@@ -41,7 +32,7 @@ function dataPreprocessor(row) {
             loseDeaths: +row.blueDeaths,
             loseAssists: +row.blueAssists,
             loseTotalGold: +row.blueTotalGold,
-            loseCSPerMin: +row.blueCSPerMin * 10,
+            loseCS: +row.blueCSPerMin * 10,
             loseTowers: +row.blueTowersDestroyed,
             loseWards: +row.blueWardsPlaced,
             loseGoldDiff: +row.blueGoldDiff,
@@ -52,7 +43,7 @@ function dataPreprocessor(row) {
             winDeaths: +row.redDeaths,
             winAssists: +row.redAssists,
             winTotalGold: +row.redTotalGold,
-            winCSPerMin: +row.redCSPerMin * 10,
+            winCS: +row.redCSPerMin * 10,
             winTowers: +row.redTowersDestroyed,
             winWards: +row.redWardsPlaced,
             winGoldDiff: +row.redGoldDiff,
@@ -87,14 +78,52 @@ d3.csv('high_diamond_ranked_10min.csv', dataPreprocessor).then(function(dataset)
 
     allGames = dataset
     // **** Your JavaScript code goes here ****
-    updateChart('all');
+    updateChart();
 });
 
-function updateChart(filterCategory) {
+function updateChart() {
     // Update the chart
-    console.log(allGames);
+    var firstBlood = document.getElementById("fbCheck").checked == true;
+    var goldDiff = document.getElementById("goldDiffCheck").checked == true;
+    var gold = document.getElementById("goldCheck").checked == true;
+    var kill = document.getElementById("killCheck").checked == true;
+    var death = document.getElementById("deathCheck").checked == true;
+    var assist = document.getElementById("assistCheck").checked == true;
+    var cs = document.getElementById("csCheck").checked == true;
+    var tower = document.getElementById("towerCheck").checked == true;
+    var ward = document.getElementById("wardCheck").checked == true;
+    var level = document.getElementById("avgLvlCheck").checked == true;
 
-    if (filterCategory == 'all') {
-        filtered = allGames;
-    }
+    allGames.forEach(element => {
+        if (firstBlood) {
+            console.log("firstBlood: " + element.winFirstBlood + " " + element.loseFirstBlood);
+        }
+        if (goldDiff) {
+            console.log("goldDiff: " + element.winGoldDiff + " " + element.loseGoldDiff);
+        }
+        if (gold) {
+            console.log("totalGold: " + element.winTotalGold + " " + element.loseTotalGold);
+        }
+        if (kill) {
+            console.log("kills: " + element.winKills + " " + element.loseKills);
+        }
+        if (death) {
+            console.log("deaths: " + element.winDeaths + " " + element.loseDeaths);
+        }
+        if (assist) {
+            console.log("assists: " + element.winAssists + " " + element.loseAssists);
+        }
+        if (cs) {
+            console.log("cs: " + element.winCS + " " + element.loseCS);
+        }
+        if (tower) {
+            console.log("towers taken: " + element.winTowers + " " + element.loseTowers);
+        }
+        if (ward) {
+            console.log("wards placed: " + element.winWards + " " + element.loseWards);
+        }
+        if (level) {
+            console.log("average level: " + element.winAvgLvl + " " + element.loseAvgLvl);
+        }
+    });
 }

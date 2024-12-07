@@ -11,14 +11,36 @@
         <svg width="800" height="500" style="border: 1px solid #777;">
         </svg>
         <div>
-            <label for="categorySelect">Show: </label>
-            <select class="custom-select" id="categorySelect" onchange="onCategoryChanged()">
-                <option selected value="all">All Games</option>
-                <option value="Winner">Winner</option>
-                <option value="Loser">Loser</option>
-                <option value="Red">Red</option>
-                <option value="Blue">Blue</option>
-            </select>
+            <label>First Blood
+                <input type="checkbox" id="fbCheck" onclick="updateChart()" checked="checked">
+            </label><br /> 
+            <label>Gold Difference
+                <input type="checkbox" id="goldDiffCheck" onclick="updateChart()" checked="checked">
+            </label><br /> 
+            <label>Total Gold
+                <input type="checkbox" id="goldCheck" onclick="updateChart()">
+            </label><br /> 
+            <label>Kills
+                <input type="checkbox" id="killCheck" onclick="updateChart()">
+            </label><br /> 
+            <label>Deaths
+                <input type="checkbox" id="deathCheck" onclick="updateChart()">
+            </label><br /> 
+            <label>Assists
+                <input type="checkbox" id="assistCheck" onclick="updateChart()">
+            </label><br /> 
+            <label>Towers Destroyed
+                <input type="checkbox" id="towerCheck" onclick="updateChart()" checked="checked">
+            </label><br /> 
+            <label>CS
+                <input type="checkbox" id="csCheck" onclick="updateChart()">
+            </label><br /> 
+            <label>Wards Placed
+                <input type="checkbox" id="wardCheck" onclick="updateChart()">
+            </label><br /> 
+            <label>Average Level
+                <input type="checkbox" id="avgLvlCheck" onclick="updateChart()">
+            </label>
         </div>
     </div>
 </body>
