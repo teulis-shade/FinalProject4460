@@ -64,7 +64,7 @@ var padding = {t: 60, r: 40, b: 30, l: 120};
 
 // Compute chart dimensions
 var chartWidth = svgWidth - padding.l - padding.r;
-var chartHeight = svgHeight - padding.t - padding.b;
+var chartHeight = svgHeight - padding.t - padding.b - 50;
 
 // Create a group element for appending chart elements
 var chartG = svg.append('g')
@@ -92,21 +92,42 @@ d3.csv('high_diamond_ranked_10min.csv', dataPreprocessor).then(function(dataset)
     updateChart();
 });
 
+function toggleButton(button, labelText) {
+    button.classList.toggle("active");
+    updateChart();
+}
+
+function drawAxis(scale, label, currentX) {
+    const axisGroup = chartG.append("g")
+         .attr("transform", `translate(${currentX}, 0)`);
+    const axis = d3.axisLeft(scale)
+         .ticks(5);
+    axisGroup.call(axis);
+
+    axisGroup.append("text")
+         .attr("x", currentX)
+         .attr("y", 0)
+         .attr("text-anchor", "middle")
+         .attr("transform", "rotate(-90)")
+         .style("font-size", "12px")
+         .text(label);
+    }
+
 function updateChart() {
     // clear the old stuff
     chartG.selectAll("*").remove();
 
     // Get what variables we are tracking for the checkbox
-    var firstBlood = document.getElementById("fbCheck").checked == true;
-    var goldDiff = document.getElementById("goldDiffCheck").checked == true;
-    var gold = document.getElementById("goldCheck").checked == true;
-    var kill = document.getElementById("killCheck").checked == true;
-    var death = document.getElementById("deathCheck").checked == true;
-    var assist = document.getElementById("assistCheck").checked == true;
-    var cs = document.getElementById("csCheck").checked == true;
-    var tower = document.getElementById("towerCheck").checked == true;
-    var ward = document.getElementById("wardCheck").checked == true;
-    var level = document.getElementById("avgLvlCheck").checked == true;
+    var firstBlood = document.getElementById("fbCheck").classList.contains("active") == true;
+    var goldDiff = document.getElementById("goldDiffCheck").classList.contains("active") == true;
+    var gold = document.getElementById("goldCheck").classList.contains("active") == true;
+    var kill = document.getElementById("killCheck").classList.contains("active") == true;
+    var death = document.getElementById("deathCheck").classList.contains("active") == true;
+    var assist = document.getElementById("assistCheck").classList.contains("active") == true;
+    var cs = document.getElementById("csCheck").classList.contains("active") == true;
+    var tower = document.getElementById("towerCheck").classList.contains("active") == true;
+    var ward = document.getElementById("wardCheck").classList.contains("active") == true;
+    var level = document.getElementById("avgLvlCheck").classList.contains("active") == true;
 
     allGames.forEach(element => {
         
@@ -120,10 +141,12 @@ function updateChart() {
         var previousDot = null;
         var newLine = chartG.append("g");
         // Set the style of the line to the color of the winner
-        var style = "stroke:" + element.winColor + ";stroke-width:2;stroke-opacity:.05";
+        var style = "stroke:" + element.winColor + ";stroke-width:1;stroke-opacity:.02";
 
         // Use these to start the lines
         if (firstBlood) {
+            drawAxis(firstBloodScale, "First Blood", axisBand * numberUsed);
+            drawAxis(firstBloodScale, "First Blood", axisBand * (numberUsed + 1));
             newLine.append("line")
                 .attr("y1", firstBloodScale(element.winFirstBlood))
                 .attr("y2", firstBloodScale(element.loseFirstBlood))
@@ -135,6 +158,8 @@ function updateChart() {
             numberUsed += 2;
         }
         if (goldDiff) {
+            drawAxis(goldDiffScale, "Gold Diff", axisBand * numberUsed);
+            drawAxis(goldDiffScale, "Gold Diff", axisBand * (numberUsed + 1));
             newLine.append("line")
                 .attr("y1", goldDiffScale(element.winGoldDiff))
                 .attr("y2", goldDiffScale(element.loseGoldDiff))
