@@ -104,11 +104,10 @@ function drawAxis(scale, label, currentX) {
          .ticks(5);
     axisGroup.call(axis);
 
-    axisGroup.append("text")
+    chartG.append("text")
          .attr("x", currentX)
-         .attr("y", 0)
+         .attr("y", 15)
          .attr("text-anchor", "middle")
-         .attr("transform", "rotate(-90)")
          .style("font-size", "12px")
          .text(label);
     }
@@ -191,7 +190,7 @@ function updateChart() {
         var previousDot = null;
         var newLine = chartG.append("g");
         // Set the style of the line to the color of the winner
-        var style = "stroke:" + element.winColor + ";stroke-width:2;stroke-opacity:.04";
+        var style = "stroke:" + element.winColor + ";stroke-width:2;stroke-opacity:.08";
 
         // Use these to start the lines
         if (firstBlood) {
