@@ -97,11 +97,18 @@ function toggleButton(button, labelText) {
     updateChart();
 }
 
-function drawAxis(scale, label, currentX) {
+function drawAxis(scale, label, currentX, tick2) {
     const axisGroup = chartG.append("g")
          .attr("transform", `translate(${currentX}, 0)`);
-    const axis = d3.axisLeft(scale)
-         .ticks(5);
+
+    const axis = null;
+    if (tick2) {
+        axis = d3.axisLeft(scale).ticks(2);
+    }
+    else {
+        axis = d3.axisLeft(scale)
+            .ticks(5);
+    }
     axisGroup.call(axis);
 
     chartG.append("text")
@@ -133,52 +140,52 @@ function updateChart() {
     var numberUsed = 0;
 
     if (firstBlood) {
-       drawAxis(firstBloodScale, "Winner First Blood", axisBand * numberUsed++);
-       drawAxis(firstBloodScale, "Loser First Blood", axisBand * numberUsed++);
+       drawAxis(firstBloodScale, "Winner First Blood", axisBand * numberUsed++, true);
+       drawAxis(firstBloodScale, "Loser First Blood", axisBand * numberUsed++, true);
     }
     if (goldDiff) {
-       drawAxis(goldDiffScale, "Winner Gold Diff", axisBand * numberUsed++);
-       drawAxis(goldDiffScale, "Loser Gold Diff", axisBand * numberUsed++);
+       drawAxis(goldDiffScale, "Winner Gold Diff", axisBand * numberUsed++, false);
+       drawAxis(goldDiffScale, "Loser Gold Diff", axisBand * numberUsed++, false);
     }
 
     if (gold) {
-       drawAxis(totalGoldScale, "Winner Gold", axisBand * numberUsed++);
-       drawAxis(totalGoldScale, "Loser Gold", axisBand * numberUsed++);
+       drawAxis(totalGoldScale, "Winner Gold", axisBand * numberUsed++, false);
+       drawAxis(totalGoldScale, "Loser Gold", axisBand * numberUsed++, false);
     }
 
     if (kill) {
-       drawAxis(killScale, "Winner Kills", axisBand * numberUsed++);
-       drawAxis(killScale, "Loser Kills", axisBand * numberUsed++);
+       drawAxis(killScale, "Winner Kills", axisBand * numberUsed++, false);
+       drawAxis(killScale, "Loser Kills", axisBand * numberUsed++, false);
     }
 
     if (death) {
-       drawAxis(deathScale, "Winner Deaths", axisBand * numberUsed++);
-       drawAxis(deathScale, "Loser Deaths", axisBand * numberUsed++);
+       drawAxis(deathScale, "Winner Deaths", axisBand * numberUsed++, false);
+       drawAxis(deathScale, "Loser Deaths", axisBand * numberUsed++, false);
     }
 
     if (assist) {
-       drawAxis(assistsScale, "Winner Assists", axisBand * numberUsed++);
-       drawAxis(assistsScale, "Loser Assists", axisBand * numberUsed++);
+       drawAxis(assistsScale, "Winner Assists", axisBand * numberUsed++, false);
+       drawAxis(assistsScale, "Loser Assists", axisBand * numberUsed++, false);
     }
 
     if (cs) {
-       drawAxis(csScale, "Winner CS", axisBand * numberUsed++);
-       drawAxis(csScale, "Loser CS", axisBand * numberUsed++);
+       drawAxis(csScale, "Winner CS", axisBand * numberUsed++, false);
+       drawAxis(csScale, "Loser CS", axisBand * numberUsed++, false);
     }
 
     if (tower) {
-       drawAxis(towerScale, "Winner Towers", axisBand * numberUsed++);
-       drawAxis(towerScale, "Loser Towers", axisBand * numberUsed++);
+       drawAxis(towerScale, "Winner Towers", axisBand * numberUsed++, false);
+       drawAxis(towerScale, "Loser Towers", axisBand * numberUsed++, false);
     }
 
     if (ward) {
-       drawAxis(wardScale, "Winner Wards", axisBand * numberUsed++);
-       drawAxis(wardScale, "Loser Wards", axisBand * numberUsed++);
+       drawAxis(wardScale, "Winner Wards", axisBand * numberUsed++, false);
+       drawAxis(wardScale, "Loser Wards", axisBand * numberUsed++, false);
     }
 
     if (level) {
-       drawAxis(lvlScale, "Winner Average Level", axisBand * numberUsed++);
-       drawAxis(lvlScale, "Loser Average Level", axisBand * numberUsed++);
+       drawAxis(lvlScale, "Winner Average Level", axisBand * numberUsed++, false);
+       drawAxis(lvlScale, "Loser Average Level", axisBand * numberUsed++, false);
     }
 
     allGames.forEach(element => {
