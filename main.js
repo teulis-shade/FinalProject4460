@@ -116,12 +116,42 @@ function updateChart() {
     // clear the old stuff
     chartG.selectAll("*").remove();
 
+    // chart title
     chartG.append("text")
     .attr("x", 20)
     .attr("y", 0)
     .style("font-size", "18px")
     .style("font-weight", "bold")
     .text("League Of Legends Game Statistics");
+
+    // chart key
+    chartG.append("text")
+    .attr("x", 20)
+    .attr("y", chartHeight + 20)
+    .style("font-size", "12px")
+    .text("Red Team Won Game");
+
+    chartG.append("line")
+    .attr("x1", 0)
+    .attr("x2", 15)
+    .attr("y1", chartHeight + 18)
+    .attr("y2", chartHeight + 18)
+    .style("stroke", "red")
+    .style("stroke-width", 2);
+
+    chartG.append("text")
+    .attr("x", 20)
+    .attr("y", chartHeight + 30)
+    .style("font-size", "12px")
+    .text("Blue Team Won Game");
+
+     chartG.append("line")
+    .attr("x1", 0)
+    .attr("x2", 15)
+    .attr("y1", chartHeight + 28)
+    .attr("y2", chartHeight + 28)
+    .style("stroke", "blue")
+    .style("stroke-width", 2);
 
     // Get what variables we are tracking for the checkbox
     var firstBlood = document.getElementById("fbCheck").classList.contains("active") == true;
