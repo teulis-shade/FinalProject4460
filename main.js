@@ -101,13 +101,12 @@ function drawAxis(scale, label, currentX, tick2) {
     const axisGroup = chartG.append("g")
          .attr("transform", `translate(${currentX}, 0)`);
 
-    const axis = null;
+    const axis = d3.axisLeft(scale)
     if (tick2) {
-        axis = d3.axisLeft(scale).ticks(2);
+        axis.ticks(1);
     }
     else {
-        axis = d3.axisLeft(scale)
-            .ticks(5);
+        axis.ticks(5);
     }
     axisGroup.call(axis);
 
@@ -125,11 +124,17 @@ function updateChart() {
 
     // chart title
     chartG.append("text")
-    .attr("x", 20)
-    .attr("y", 0)
+    .attr("x", 0)
+    .attr("y", -30)
     .style("font-size", "18px")
     .style("font-weight", "bold")
-    .text("League Of Legends Game Statistics");
+    .text("FF 15?");
+
+    chartG.append("text")
+    .attr("x", 0)
+    .attr("y", -10)
+    .style("font-size", "18px")
+    .text("League Of Legends Team Stats at 10 Minutes");
 
     // chart key
     chartG.append("text")
